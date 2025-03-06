@@ -28,39 +28,50 @@
             font-size: 16px;
             cursor: pointer;
         }
+        #error-message {
+            color: red;
+            margin-top: 15px;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
 <button id="start-camera">Start Camera</button>
 <video id="camera-stream" autoplay playsinline></video>
+<div id="error-message"></div>
 
 <!-- Include Telegram Web App library -->
 <script src="telegram-web-app.js"></script>
 <script>
     const videoElement = document.getElementById('camera-stream');
     const startButton = document.getElementById('start-camera');
+    const errorMessageDiv = document.getElementById('error-message');
 
-    // Function to start the camera
     async function startCamera() {
+        // Clear any previous error messages
+        errorMessageDiv.textContent = '';
+
         try {
-            // Request access to the camera
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             videoElement.srcObject = stream;
-            startButton.disabled = true;
 
-            // Optional: Notify Telegram Web App (if needed)
+            // Optional: Notify Telegram Web App
             Telegram.WebApp.sendData('CAMERA_STARTED');
+
+            startButton.disabled = true;
         } catch (error) {
-            console.error('Error accessing camera:', error);
-            alert('Failed to access camera. Check permissions!');
+            // Show error message in the div instead of console/alert
+            errorMessageDiv.textContent = `Error accessing camera: ${error.message}`;
+
+            // Optional: Log to console for debugging
+            console.error('Camera access failed:', error);
         }
     }
 
-    // Event listener for the "Start Camera" button
     startButton.addEventListener('click', startCamera);
 
-    // Optional: Handle Telegram Web App events (e.g., close the app)
-    Telegram.WebApp.onEvent('web_app_close', (eventData) => {
+    // Optional: Handle Telegram events
+    Telegram.WebApp.onEvent('web_app_close', () => {
         if (videoElement.srcObject) {
             const stream = videoElement.srcObject;
             stream.getTracks().forEach(track => track.stop());
