@@ -71,13 +71,13 @@
 
     startButton.addEventListener('click', startCamera);
 
-    // Optional: Handle Telegram events
-    Telegram.WebApp.onEvent('web_app_close', () => {
-        if (videoElement.srcObject) {
-            const stream = videoElement.srcObject;
-            stream.getTracks().forEach(track => track.stop());
-        }
-    });
+<!--    // Optional: Handle Telegram events-->
+<!--    Telegram.WebApp.onEvent('web_app_close', () => {-->
+<!--        if (videoElement.srcObject) {-->
+<!--            const stream = videoElement.srcObject;-->
+<!--            stream.getTracks().forEach(track => track.stop());-->
+<!--        }-->
+<!--    });-->
 </script>
 </body>
 </html>
