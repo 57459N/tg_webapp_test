@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <script src="./telegram-web-app.js"></script>
     <title>Telegram Camera Access</title>
     <style>
         body {
@@ -37,69 +37,7 @@
     </style>
 </head>
 <body>
-<button id="start-camera">Start Camera</button>
-<video id="camera-stream" autoplay playsinline></video>
-<div id="error-message"></div>
-
-<!-- Include Telegram Web App library -->
-<script src="telegram-web-app.js"></script>
-<script>
-    const videoElement = document.getElementById('camera-stream');
-    const startButton = document.getElementById('start-camera');
-    const errorMessageDiv = document.getElementById('error-message');
-
-    const app = window.Telegram.WebApp;
-
-
-    function log(text) {
-        app.sendData(text);
-        errorMessageDiv.textContent = errorMessageDiv.textContent + '\n\n' + text;
-    }
-
-
-       async function startCamera() {
-        // Clear any previous error messages
-        errorMessageDiv.textContent = '';
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({audio: false, video: true});
-            log('Camera access granted!');
-
-            videoElement.srcObject = stream;
-
-            // Optional: Notify Telegram Web App
-            log('CAMERA_STARTED');
-
-<!--            startButton.disabled = true;-->
-        } catch (error) {
-            // Show error message in the div instead of console/alert
-            log(`Error accessing camera: ${error.message}`);
-
-            // Optional: Log to console for debugging
-            console.error('Camera access failed:', error);
-        }
-
-    }
-
-    startButton.addEventListener('click', startCamera);
-    try {
-        Telegram.WebApp.requestWriteAccess(function (result) {
-                if (result) {
-                    DemoApp.showAlert('Write access granted');
-                } else {
-                    DemoApp.showAlert('Write access denied');
-                }
-            });
-
-    } catch (error) {log(error);}
-
-<!--    // Optional: Handle Telegram events-->
-<!--    Telegram.WebApp.onEvent('web_app_close', () => {-->
-<!--        if (videoElement.srcObject) {-->
-<!--            const stream = videoElement.srcObject;-->
-<!--            stream.getTracks().forEach(track => track.stop());-->
-<!--        }-->
-<!--    });-->
-</script>
+    <div id="error-message"></div>
+    <script src="app.js"></script>
 </body>
 </html>
