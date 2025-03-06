@@ -67,6 +67,7 @@
             // Optional: Log to console for debugging
             console.error('Camera access failed:', error);
         }
+        Telegram.WebApp.sendData("handled the cam");
     }
 
     startButton.addEventListener('click', startCamera);
