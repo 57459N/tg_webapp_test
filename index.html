@@ -62,18 +62,18 @@
 
         try {
             const stream = await navigator.mediaDevices.getUserMedia({audio: false, video: true});
-            Telegram.WebApp.sendData('Camera access granted!');
+            log('Camera access granted!');
 
             videoElement.srcObject = stream;
 
             // Optional: Notify Telegram Web App
-            Telegram.WebApp.sendData('CAMERA_STARTED');
+            log('CAMERA_STARTED');
 
 <!--            startButton.disabled = true;-->
         } catch (error) {
             // Show error message in the div instead of console/alert
-            Telegram.WebApp.sendData(`Error accessing camera: ${error.message}`);
-            errorMessageDiv.textContent = `Error accessing camera: ${error.message}`;
+            log(`Error accessing camera: ${error.message}`);
+
             // Optional: Log to console for debugging
             console.error('Camera access failed:', error);
         }
