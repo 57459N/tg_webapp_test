@@ -83,7 +83,13 @@
 
     startButton.addEventListener('click', startCamera);
 
-    if (app.requestWriteAccess()) {log('I can write to you!');} else {log('Oops, no writing today :(');}
+    Telegram.WebApp.requestWriteAccess(function (result) {
+                if (result) {
+                    DemoApp.showAlert('Write access granted');
+                } else {
+                    DemoApp.showAlert('Write access denied');
+                }
+            });
 
 <!--    // Optional: Handle Telegram events-->
 <!--    Telegram.WebApp.onEvent('web_app_close', () => {-->
