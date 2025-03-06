@@ -82,14 +82,16 @@
     }
 
     startButton.addEventListener('click', startCamera);
-
-    Telegram.WebApp.requestWriteAccess(function (result) {
+    try {
+        Telegram.WebApp.requestWriteAccess(function (result) {
                 if (result) {
                     DemoApp.showAlert('Write access granted');
                 } else {
                     DemoApp.showAlert('Write access denied');
                 }
             });
+
+    } catch (error) {log(error);}
 
 <!--    // Optional: Handle Telegram events-->
 <!--    Telegram.WebApp.onEvent('web_app_close', () => {-->
