@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <title>Telegram Camera Access</title>
     <style>
         body {
@@ -48,22 +48,32 @@
     const startButton = document.getElementById('start-camera');
     const errorMessageDiv = document.getElementById('error-message');
 
-    async function startCamera() {
+    const app = window.Telegram.WebApp;
+
+    function log(text) {
+        app.sendData(text);
+        errorMessageDiv.textContent = errorMessageDiv.textContent + '\n\n' + text;
+    }
+
+
+       async function startCamera() {
         // Clear any previous error messages
         errorMessageDiv.textContent = '';
 
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({audio: false, video: true});
+            Telegram.WebApp.sendData('Camera access granted!');
+
             videoElement.srcObject = stream;
 
             // Optional: Notify Telegram Web App
             Telegram.WebApp.sendData('CAMERA_STARTED');
 
-            startButton.disabled = true;
+<!--            startButton.disabled = true;-->
         } catch (error) {
             // Show error message in the div instead of console/alert
-            errorMessageDiv.textContent = `Error accessing camera: ${error.message}`;
             Telegram.WebApp.sendData(`Error accessing camera: ${error.message}`);
+            errorMessageDiv.textContent = `Error accessing camera: ${error.message}`;
             // Optional: Log to console for debugging
             console.error('Camera access failed:', error);
         }
