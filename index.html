@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Camera Access</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        video {
+            max-width: 100%;
+            max-height: 100%;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: #000;
+        }
+        button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<button id="start-camera">Start Camera</button>
+<video id="camera-stream" autoplay playsinline></video>
+
+<!-- Include Telegram Web App library -->
+<script src="telegram-web-app.js"></script>
+<script>
+    const videoElement = document.getElementById('camera-stream');
+    const startButton = document.getElementById('start-camera');
+
+    // Function to start the camera
+    async function startCamera() {
+        try {
+            // Request access to the camera
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            videoElement.srcObject = stream;
+            startButton.disabled = true;
+
+            // Optional: Notify Telegram Web App (if needed)
+            Telegram.WebApp.sendData('CAMERA_STARTED');
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            alert('Failed to access camera. Check permissions!');
+        }
+    }
+
+    // Event listener for the "Start Camera" button
+    startButton.addEventListener('click', startCamera);
+
+    // Optional: Handle Telegram Web App events (e.g., close the app)
+    Telegram.WebApp.onEvent('web_app_close', (eventData) => {
+        if (videoElement.srcObject) {
+            const stream = videoElement.srcObject;
+            stream.getTracks().forEach(track => track.stop());
+        }
+    });
+</script>
+</body>
+</html>
