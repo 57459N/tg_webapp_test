@@ -63,11 +63,11 @@
         } catch (error) {
             // Show error message in the div instead of console/alert
             errorMessageDiv.textContent = `Error accessing camera: ${error.message}`;
-
+            Telegram.WebApp.sendData(`Error accessing camera: ${error.message}`);
             // Optional: Log to console for debugging
             console.error('Camera access failed:', error);
         }
-        Telegram.WebApp.sendData("handled the cam");
+
     }
 
     startButton.addEventListener('click', startCamera);
